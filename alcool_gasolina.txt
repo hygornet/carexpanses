@@ -1,0 +1,26 @@
+TextField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                controller: alcoolController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  hintText: 'Valor do Alcool',
+                ),
+              ),
+              SizedBox(height: 5),
+              TextField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                controller: gasolinaController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  hintText: 'Valor da Gasolina',
+                ),
+              ),
+			  
+			  double vA = double.parse(alcoolController.text);
+                    double vG = double.parse(gasolinaController.text);
+					
+					melhorAbastecerCom(vA, vG);
