@@ -33,39 +33,42 @@ class _PageAbastecerState extends State<PageAbastecer> {
   double calculo2;
   int c = 0;
   double guardarUltMedia;
-  Map<String, Object> abastecimentoMap = {};
+  bool _autoValidate = false;
 
   @override
   Widget build(BuildContext context) {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
 
-    var abastecer = Abastecimento();
+    Abastecimento abastecer = Abastecimento();
 
     double modal = ModalRoute.of(context).settings.arguments;
 
     void addAbastecimento() {
+      var isValid = _formKey.currentState.validate();
+
+      if (!isValid) {
+        return;
+      }
+
       _formKey.currentState.save();
       abastecer = Abastecimento(
         id: Random().nextInt(1000),
-        valorAbastecimento: double.parse(valorController.text),
-        litroAbastecimento: double.parse(litroController.text),
-        hodometroAtual: double.parse(hodometroAtualController.text),
-        tipoCombustivel: tipoCombustivelController.text,
-        dateTime: dataAtual,
-        despesasDoMes: totalValorGasto,
+        valorAbastecimento: _formData['valor'],
+        litroAbastecimento: _formData['litro'],
+        hodometroAtual: _formData['hodometro'],
+        tipoCombustivel: _formData['combustivel'],
+        dateTime: _formData['data'],
+        despesasDoMes: _formData['despesaMes'],
       );
+
       abastecimentoProvider.adicionarAbastecimento(abastecer);
     }
 
     void limparCampos() {
-      litroController.text = "";
       valorController.text = "";
-      alcoolController.text = "";
-      gasolinaController.text = "";
+      litroController.text = "";
       hodometroAtualController.text = "";
-      hodometroAnteriorController.text = "";
       tipoCombustivelController.text = "";
-      dateTimeController.text = "";
     }
 
     double ultimaMedia(double kmPercorrido, double litros) {
@@ -118,79 +121,104 @@ class _PageAbastecerState extends State<PageAbastecer> {
             children: [
               Form(
                 key: _formKey,
-                child: TextFormField(
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  controller: valorController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      controller: valorController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        labelText: 'Valor',
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Digite o valor do abastecimento.';
+                        }
+                      },
+                      onSaved: (newValue) =>
+                          _formData['valor'] = double.parse(newValue),
                     ),
-                    labelText: 'Valor',
-                  ),
-                  onSaved: (newValue) =>
-                      abastecimento.valorAbastecimento = double.parse(newValue),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      controller: litroController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        labelText: 'Litros',
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Digite a quantidade de litros que entrou em seu veículo';
+                        }
+                      },
+                      onSaved: (newValue) =>
+                          _formData['litro'] = double.parse(newValue),
+                    ),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      controller: hodometroAtualController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        labelText: 'Hodometro atual',
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Digite o hodometro atual';
+                        }
+                      },
+                      onSaved: (newValue) =>
+                          _formData['hodometro'] = double.parse(newValue),
+                    ),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      controller: tipoCombustivelController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        labelText: 'Tipo de Combustível',
+                      ),
+                      onSaved: (newValue) =>
+                          _formData['combustivel'] = newValue,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Qual combustivel escolheu neste abastecimento?';
+                        }
+                      },
+                    ),
+                    SizedBox(height: 5),
+                  ],
                 ),
               ),
-              SizedBox(height: 5),
-              TextFormField(
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                controller: litroController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  labelText: 'Litros',
-                ),
-                onSaved: (newValue) =>
-                    abastecimento.litroAbastecimento = double.parse(newValue),
-              ),
-              SizedBox(height: 5),
-              TextFormField(
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                controller: hodometroAtualController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  labelText: 'Hodometro atual',
-                ),
-                onSaved: (newValue) =>
-                    abastecimento.hodometroAtual = double.parse(newValue),
-              ),
-              SizedBox(height: 5),
-              TextFormField(
-                controller: tipoCombustivelController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  labelText: 'Tipo de Combustível',
-                ),
-                onSaved: (newValue) => abastecimento.tipoCombustivel = newValue,
-              ),
-              SizedBox(height: 5),
+
               SizedBox(height: 5),
               Container(
                 width: double.infinity,
                 child: RaisedButton(
                   child: Text('Calcular'),
                   onPressed: () {
-                    double l = double.parse(litroController.text);
-                    double v = double.parse(valorController.text);
-
-                    valorSomarGastos = somarGastos(v);
-                    totalValorGasto += valorSomarGastos;
-
                     setState(() {
                       count++;
                       addAbastecimento();
-                      somarGastos(v);
                     });
+                    double litro = _formData['litro'];
+
+                    double valor = abastecer.valorAbastecimento;
+                    valorSomarGastos = somarGastos(valor);
+                    totalValorGasto += valorSomarGastos;
 
                     limparCampos();
 
-                    print("Valor: " + v.toString());
-                    print("Litro: " + l.toString());
                     print("Hodometro Atual: " +
                         abastecer.hodometroAtual.toString());
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
@@ -200,7 +228,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     if (modal != 0) {
                       calculo2 = abastecer.hodometroAtual - modal;
                       print("calculo: " + calculo2.toString());
-                      guardarUltMedia = ultimaMedia(calculo2, l);
+                      guardarUltMedia = ultimaMedia(calculo2, litro);
                       print("ultima media: " + guardarUltMedia.toString());
                       print("------------------------------------");
                       abastecimentoProvider.ultimaMedia = guardarUltMedia;
