@@ -169,7 +169,9 @@ class _PageAbastecerState extends State<PageAbastecer> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        labelText: 'Hodometro atual',
+                        labelText: 'Hodometro',
+                        hintText:
+                            'Hodometro anterior: ${modal.toString() ?? 0}',
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
