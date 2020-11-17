@@ -170,8 +170,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         labelText: 'Hodometro',
-                        hintText:
-                            'Hodometro anterior: ${modal.toString() ?? 0}',
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
@@ -181,6 +179,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
                       onSaved: (newValue) =>
                           _formData['hodometro'] = double.parse(newValue),
                     ),
+                    SizedBox(height: 5),
+                    Text('Hodometro anterior: ${modal.toString() ?? 0}'),
                     SizedBox(height: 5),
                     TextFormField(
                       controller: tipoCombustivelController,
