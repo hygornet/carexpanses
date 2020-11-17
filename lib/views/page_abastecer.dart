@@ -27,12 +27,12 @@ class _PageAbastecerState extends State<PageAbastecer> {
   var dataAtual = DateTime.now();
 
   String resultado = "";
-  double valorSomarGastos = 0;
+  double guardaSomarGastos = 0;
   double totalValorGasto = 0;
   int count = 0;
-  double calculo2;
+  double calculoUltimaMedia;
   int c = 0;
-  double guardarUltMedia;
+  double guardaUltimaMedia;
   bool _autoValidate = false;
 
   @override
@@ -41,7 +41,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
     Abastecimento abastecer = Abastecimento();
 
-    double modal = ModalRoute.of(context).settings.arguments;
+    double hodometroAnterior = ModalRoute.of(context).settings.arguments;
 
     void addAbastecimento() {
       var isValid = _formKey.currentState.validate();
@@ -180,7 +180,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           _formData['hodometro'] = double.parse(newValue),
                     ),
                     SizedBox(height: 5),
-                    Text('Hodometro anterior: ${modal.toString() ?? 0}'),
+                    Text(
+                        'Hodometro anterior: ${hodometroAnterior.toString() ?? 0}'),
                     SizedBox(height: 5),
                     TextFormField(
                       controller: tipoCombustivelController,
@@ -216,8 +217,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     double litro = _formData['litro'];
 
                     double valor = abastecer.valorAbastecimento;
-                    valorSomarGastos = somarGastos(valor);
-                    totalValorGasto += valorSomarGastos;
+                    guardaSomarGastos = somarGastos(valor);
+                    totalValorGasto += guardaSomarGastos;
 
                     limparCampos();
 
@@ -225,15 +226,17 @@ class _PageAbastecerState extends State<PageAbastecer> {
                         abastecer.hodometroAtual.toString());
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
 
-                    print(modal);
+                    print(hodometroAnterior);
 
-                    if (modal != 0) {
-                      calculo2 = abastecer.hodometroAtual - modal;
-                      print("calculo: " + calculo2.toString());
-                      guardarUltMedia = ultimaMedia(calculo2, litro);
-                      print("ultima media: " + guardarUltMedia.toString());
+                    if (hodometroAnterior != 0) {
+                      calculoUltimaMedia =
+                          abastecer.hodometroAtual - hodometroAnterior;
+                      print("calculo: " + calculoUltimaMedia.toString());
+                      guardaUltimaMedia =
+                          ultimaMedia(calculoUltimaMedia, litro);
+                      print("ultima media: " + guardaUltimaMedia.toString());
                       print("------------------------------------");
-                      abastecimentoProvider.ultimaMedia = guardarUltMedia;
+                      abastecimentoProvider.ultimaMedia = guardaUltimaMedia;
 
                       Navigator.of(context).pop(
                         abastecimentoProvider.ultimaMedia,
