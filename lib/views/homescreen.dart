@@ -29,6 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
 
     double number = 0;
+
+    Map<String, Object> _info = Map<String, Object>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -122,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed(AppRoutes.SCREEN_ABASTECER,
-                                    arguments: number)
+                                    arguments: _info)
                                 .then((value) {
                               setState(() {
                                 abastecimentoProvider.ultimaMedia = value;
@@ -205,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.builder(
                   itemCount: abastecimentoProvider.countList,
                   itemBuilder: (ctx, i) {
-                    number = abastecimentoProvider.itemsList[i].hodometroAtual;
+                    _info['hodometroAnterior'] =
+                        abastecimentoProvider.itemsList[i].hodometroAtual;
                     return InkWell(
                       onTap: () {
                         Navigator.of(context)
