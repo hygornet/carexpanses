@@ -31,9 +31,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
   double totalValorGasto = 0;
   int count = 0;
   double calculoUltimaMedia;
-  int c = 0;
   double guardaUltimaMedia;
-  bool _autoValidate = false;
 
   @override
   Widget build(BuildContext context) {
