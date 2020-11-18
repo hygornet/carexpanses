@@ -35,6 +35,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var alcoolController = TextEditingController();
+    var gasolinaController = TextEditingController();
+    String resultado = "";
+
+    String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
+      double resultGasolina = valorGasolina * 0.7;
+      var r = double.parse(resultGasolina.toStringAsFixed(2));
+      if (r < valorAlcool) {
+        return resultado = 'Complete com alcool';
+      } else if (r > valorAlcool) {
+        return resultado = 'Complete com gasolina';
+      } else if (r == valorAlcool) {
+        return resultado = 'Os dois tem o mesmo custo benefício.';
+      }
+    }
+
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
 
     double number = 0;
@@ -50,17 +66,26 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         elevation: 3,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
               'lib/assets/icons8-serviço-de-carro-48.png',
               fit: BoxFit.contain,
               height: 48,
             ),
-            SizedBox(width: 5),
             Text(
               'CarExpanses',
               style: TextStyle(color: Colors.blue[400]),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoutes.ALCOOL_GASOLINA);
+              },
+              child: Image.asset(
+                'lib/assets/alcoolorgasolina3.png',
+                fit: BoxFit.contain,
+                height: 48,
+              ),
             ),
           ],
         ),
