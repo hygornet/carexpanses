@@ -232,13 +232,14 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     print('MAP VALOR TOTAL GASTOS: ' +
                         _infoAbastecimento['valorTotalGastos'].toString());
 
+                    print('HODOMETRO ANTERIOR' +
+                        _infoAbastecimento['hodometroAnterior'].toString());
+
                     limparCampos();
 
                     print("Hodometro Atual: " +
                         abastecer.hodometroAtual.toString());
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
-
-                    print(_infoAbastecimento['hodometroAnterior']);
 
                     if (_infoAbastecimento['hodometroAnterior'] != 0) {
                       calculoUltimaMedia = abastecer.hodometroAtual -
