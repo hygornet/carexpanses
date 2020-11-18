@@ -76,10 +76,20 @@ class _AlcoolGasolinaState extends State<AlcoolGasolina> {
                       child: RaisedButton(
                         child: Text('CALCULAR'),
                         onPressed: () {
+                          double resultGasolina =
+                              double.parse(gasolinaController.text) * 0.7;
+                          String resultado;
+                          var r =
+                              double.parse(resultGasolina.toStringAsFixed(2));
+                          if (r < double.parse(alcoolController.text)) {
+                            resultado = 'Complete com alcool';
+                          } else if (r > double.parse(alcoolController.text)) {
+                            resultado = 'Complete com gasolina';
+                          } else if (r == double.parse(alcoolController.text)) {
+                            resultado = 'Os dois tem o mesmo custo benefício.';
+                          }
                           setState(() {
-                            guardarMelhorAbastecerCom = melhorAbastecerCom(
-                                double.parse(alcoolController.text),
-                                double.parse(gasolinaController.text));
+                            guardarMelhorAbastecerCom = resultado;
                           });
                         },
                       ),
