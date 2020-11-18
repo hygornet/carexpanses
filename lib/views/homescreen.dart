@@ -15,9 +15,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  bool verificar() {
+  bool isContainUltimaMedia() {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
     if (abastecimentoProvider.ultimaMedia == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool isContainDespesasDoMes() {
+    final abastecimentoProvider = Provider.of<Abastecimento>(context);
+    if (abastecimentoProvider.despesasDoMes == null) {
       return false;
     } else {
       return true;
@@ -31,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
     double number = 0;
 
     Map<String, Object> _info = Map<String, Object>();
+    _info = {
+      'hodometroAnterior': 0,
+      'valorTotalGastos': abastecimentoProvider.despesasDoMes,
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -67,10 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Column(
                         children: [
-                          Text(
-                            'R\$ 100,00',
-                            style: TextStyle(fontSize: 25, color: Colors.white),
-                          ),
+                          isContainDespesasDoMes()
+                              ? Text(
+                                  'R\$${abastecimentoProvider.despesasDoMes.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                      fontSize: 25, color: Colors.white),
+                                )
+                              : Text('R\$0.00',
+                                  style: TextStyle(
+                                      fontSize: 25, color: Colors.white)),
                           SizedBox(height: 5),
                           Text('ESSE MÊS',
                               style:
@@ -85,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           FittedBox(
                             fit: BoxFit.cover,
-                            child: verificar()
+                            child: isContainUltimaMedia()
                                 ? Text(
                                     '${abastecimentoProvider.ultimaMedia.toStringAsFixed(2)} km/l',
                                     style: TextStyle(
@@ -128,9 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     arguments: _info)
                                 .then((value) {
                               setState(() {
-                                abastecimentoProvider.ultimaMedia = value;
+                                _info = value;
                               });
-                              print(abastecimentoProvider.ultimaMedia);
+                              print('Recebimento da outra tela: ' +
+                                  _info.toString());
                             });
                           },
                           color: Colors.white,
@@ -212,8 +231,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         abastecimentoProvider.itemsList[i].hodometroAtual;
                     return InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(AppRoutes.SCREEN_ABASTECER);
+                        Navigator.of(context).pushNamed(
+                            AppRoutes.SCREEN_ABASTECER,
+                            arguments: _info['hodometroAnterior']);
                       },
                       child: ListTile(
                         leading: Icon(Icons.directions_car),

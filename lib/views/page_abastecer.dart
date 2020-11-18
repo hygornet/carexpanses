@@ -189,7 +189,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     verificar()
                         ? Text(
                             'Hodometro anterior: ${_infoAbastecimento['hodometroAnterior'].toString() ?? 0}')
-                        : Text('0.0'),
+                        : Text('Hodometro anterior: 0'),
                     SizedBox(height: 5),
                     TextFormField(
                       controller: tipoCombustivelController,
@@ -228,13 +228,17 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     guardaSomarGastos = somarGastos(valor);
                     totalValorGasto += guardaSomarGastos;
 
+                    _infoAbastecimento['valorTotalGastos'] = totalValorGasto;
+                    print('MAP VALOR TOTAL GASTOS: ' +
+                        _infoAbastecimento['valorTotalGastos'].toString());
+
                     limparCampos();
 
                     print("Hodometro Atual: " +
                         abastecer.hodometroAtual.toString());
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
 
-                    print(_infoAbastecimento);
+                    print(_infoAbastecimento['hodometroAnterior']);
 
                     if (_infoAbastecimento['hodometroAnterior'] != 0) {
                       calculoUltimaMedia = abastecer.hodometroAtual -
@@ -244,13 +248,15 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           ultimaMedia(calculoUltimaMedia, litro);
                       print("ultima media: " + guardaUltimaMedia.toString());
                       print("------------------------------------");
+
                       abastecimentoProvider.ultimaMedia = guardaUltimaMedia;
+                      abastecimentoProvider.despesasDoMes = totalValorGasto;
 
                       Navigator.of(context).pop(
                         _infoAbastecimento,
                       );
                     } else {
-                      Navigator.of(context).pop(_infoAbastecimento);
+                      Navigator.of(context).pop();
                     }
                   },
                 ),
