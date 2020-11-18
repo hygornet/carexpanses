@@ -26,7 +26,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
   final format = DateFormat('dd-MM-yyyy');
   var dataAtual = DateTime.now();
 
-  String resultado = "";
   double guardaSomarGastos = 0;
   double totalValorGasto = 0;
   int count = 0;
@@ -83,18 +82,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
     double somarGastos(double value) {
       return value;
-    }
-
-    void melhorAbastecerCom(double valorAlcool, double valorGasolina) {
-      double resultGasolina = valorGasolina * 0.7;
-      var r = double.parse(resultGasolina.toStringAsFixed(2));
-      if (r < valorAlcool) {
-        resultado = 'Complete com alcool';
-      } else if (r > valorAlcool) {
-        resultado = 'Complete com gasolina';
-      } else if (r == valorAlcool) {
-        resultado = 'Os dois tem o mesmo custo benefício.';
-      }
     }
 
     return Scaffold(

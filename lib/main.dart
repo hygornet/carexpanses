@@ -1,4 +1,5 @@
 import 'package:despesascar/routes/approutes.dart';
+import 'package:despesascar/views/alcool_gasolina.dart';
 import 'package:despesascar/views/homescreen.dart';
 import 'package:despesascar/views/page_abastecer.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Car Expanses',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         home: HomeScreen(),
         routes: {
           AppRoutes.SCREEN_ABASTECER: (ctx) => PageAbastecer(),
+          AppRoutes.ALCOOL_GASOLINA: (ctx) => AlcoolGasolina(),
         },
       ),
     );
