@@ -1,30 +1,39 @@
+import 'package:despesascar/widget/input_alcool_gasolina.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class AlcoolGasolina extends StatefulWidget {
   @override
   _AlcoolGasolinaState createState() => _AlcoolGasolinaState();
 }
 
+String resultado;
+bool isValid = false;
+
+String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
+  double resultGasolina = valorGasolina * 0.7;
+  var r = double.parse(resultGasolina.toStringAsFixed(2));
+  if (r < valorAlcool) {
+    resultado = 'Complete com alcool';
+  } else if (r > valorAlcool) {
+    resultado = 'Complete com gasolina';
+  } else if (r == valorAlcool) {
+    resultado = 'Os dois tem o mesmo custo benefício.';
+  }
+  return resultado;
+}
+
 class _AlcoolGasolinaState extends State<AlcoolGasolina> {
+  void limpar() {
+    setState(() {
+      resultado = "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var alcoolController = TextEditingController();
-    var gasolinaController = TextEditingController();
-    String guardarMelhorAbastecerCom = "";
-
-    melhorAbastecerCom(double valorAlcool, double valorGasolina) {
-      double resultGasolina = valorGasolina * 0.7;
-      String resultado;
-      var r = double.parse(resultGasolina.toStringAsFixed(2));
-      if (r < valorAlcool) {
-        resultado = 'Complete com alcool';
-      } else if (r > valorAlcool) {
-        resultado = 'Complete com gasolina';
-      } else if (r == valorAlcool) {
-        resultado = 'Os dois tem o mesmo custo benefício.';
-      }
-    }
-
+    var alcoolController = MoneyMaskedTextController(decimalSeparator: '.');
+    var gasolinaController = MoneyMaskedTextController(decimalSeparator: '.');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -53,48 +62,54 @@ class _AlcoolGasolinaState extends State<AlcoolGasolina> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset('lib/assets/alcoolorgasolina5.png'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
               child: Form(
                 child: Column(
                   children: [
-                    TextFormField(
+                    Input(
+                      texto: 'Alcool',
                       controller: alcoolController,
-                      decoration:
-                          InputDecoration(hintText: 'Digite o valor do alcool'),
+                      func: limpar,
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
+                    Input(
+                      texto: 'Gasolina',
                       controller: gasolinaController,
-                      decoration: InputDecoration(
-                          hintText: 'Digite o valor da gasolina'),
                     ),
                     Container(
+                      height: 40,
                       width: double.infinity,
-                      child: RaisedButton(
-                        child: Text('CALCULAR'),
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: FlatButton(
+                        child: Text('Calcular'),
                         onPressed: () {
-                          double resultGasolina =
-                              double.parse(gasolinaController.text) * 0.7;
-                          String resultado;
-                          var r =
-                              double.parse(resultGasolina.toStringAsFixed(2));
-                          if (r < double.parse(alcoolController.text)) {
-                            resultado = 'Complete com alcool';
-                          } else if (r > double.parse(alcoolController.text)) {
-                            resultado = 'Complete com gasolina';
-                          } else if (r == double.parse(alcoolController.text)) {
-                            resultado = 'Os dois tem o mesmo custo benefício.';
-                          }
                           setState(() {
-                            guardarMelhorAbastecerCom = resultado;
+                            resultado = melhorAbastecerCom(
+                                double.parse(alcoolController.text),
+                                double.parse(gasolinaController.text));
+                            isValid = true;
                           });
                         },
                       ),
                     ),
-                    Text('Resultado: ' + guardarMelhorAbastecerCom),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    isValid
+                        ? Container(
+                            width: double.infinity,
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'lib/assets/check-clipart-gif-animation-18-unscreen.gif',
+                                  height: 100,
+                                ),
+                                Text(resultado.toString()),
+                              ],
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),

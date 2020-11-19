@@ -73,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text(
               'CarExpanses',
-              style: TextStyle(color: Colors.blue[400]),
+              style: TextStyle(
+                color: Colors.blue[400],
+              ),
             ),
             InkWell(
               onTap: () {
