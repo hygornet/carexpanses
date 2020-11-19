@@ -209,23 +209,23 @@ class _PageAbastecerState extends State<PageAbastecer> {
                       count++;
                       addAbastecimento();
                     });
-                    double litro = _formData['litro'];
 
-                    double valor = abastecer.valorAbastecimento;
+                    double litro = _formData['litro'];
+                    double valor = _formData['valor'];
                     guardaSomarGastos = somarGastos(valor);
                     totalValorGasto += guardaSomarGastos;
+
+                    limparCampos();
 
                     _infoAbastecimento['valorTotalGastos'] = totalValorGasto;
                     print('MAP VALOR TOTAL GASTOS: ' +
                         _infoAbastecimento['valorTotalGastos'].toString());
 
-                    limparCampos();
-
                     print("Hodometro Atual: " +
                         abastecer.hodometroAtual.toString());
+                    print("Hodometro Atual MAP: " +
+                        _infoAbastecimento['hodometroAnterior'].toString());
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
-
-                    print(_infoAbastecimento['hodometroAnterior']);
 
                     if (_infoAbastecimento['hodometroAnterior'] != 0) {
                       calculoUltimaMedia = abastecer.hodometroAtual -
@@ -243,7 +243,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                         _infoAbastecimento,
                       );
                     } else {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(_infoAbastecimento);
                     }
                   },
                 ),
