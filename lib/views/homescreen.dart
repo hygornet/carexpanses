@@ -53,8 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
 
-    double number = 0;
-
     Map<String, Object> _info = Map<String, Object>();
     _info = {
       'hodometroAnterior': 0,

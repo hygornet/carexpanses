@@ -209,11 +209,13 @@ class _PageAbastecerState extends State<PageAbastecer> {
                       count++;
                       addAbastecimento();
                     });
-                    double litro = _formData['litro'];
 
-                    double valor = abastecer.valorAbastecimento;
+                    double litro = _formData['litro'];
+                    double valor = _formData['valor'];
                     guardaSomarGastos = somarGastos(valor);
                     totalValorGasto += guardaSomarGastos;
+
+                    limparCampos();
 
                     _infoAbastecimento['valorTotalGastos'] = totalValorGasto;
                     print('MAP VALOR TOTAL GASTOS: ' +
@@ -226,6 +228,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
                     print("Hodometro Atual: " +
                         abastecer.hodometroAtual.toString());
+                    print("Hodometro Atual MAP: " +
+                        _infoAbastecimento['hodometroAnterior'].toString());
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
 
                     if (_infoAbastecimento['hodometroAnterior'] != 0) {
@@ -244,7 +248,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                         _infoAbastecimento,
                       );
                     } else {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(_infoAbastecimento);
                     }
                   },
                 ),
