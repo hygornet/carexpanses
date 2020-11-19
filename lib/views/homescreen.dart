@@ -256,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         Navigator.of(context).pushNamed(
                             AppRoutes.SCREEN_ABASTECER,
-                            arguments: _info['hodometroAnterior']);
+                            arguments: _info);
                       },
                       child: ListTile(
                         leading: Icon(Icons.directions_car),
