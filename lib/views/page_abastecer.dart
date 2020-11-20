@@ -23,6 +23,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
   var _formData = Map<String, Object>();
   Abastecimento abastecimento = Abastecimento();
 
+  Abastecimento abastecer = Abastecimento();
+
   final format = DateFormat('dd-MM-yyyy');
   var dataAtual = DateTime.now();
 
@@ -31,6 +33,31 @@ class _PageAbastecerState extends State<PageAbastecer> {
   int count = 0;
   double calculoUltimaMedia;
   double guardaUltimaMedia;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    final _infoAbastecimento = ModalRoute.of(context).settings.arguments as Map;
+    final abastecimentoProvider = Provider.of<Abastecimento>(context);
+
+    int i = _infoAbastecimento['index'];
+
+    if (abastecimento != null) {
+      valorController.text = _infoAbastecimento['valor'].toString();
+      litroController.text = _infoAbastecimento['litros'].toString();
+      hodometroAtualController.text =
+          _infoAbastecimento['hodometroAnterior'].toString();
+      tipoCombustivelController.text = _infoAbastecimento['tipoCombustivel'];
+    }
+
+    // if (abastecimento != null) {
+    //   valorController.text =
+    //       abastecimentoProvider.itemsList[i].valorAbastecimento.toString();
+    //   litroController.text =
+    //       abastecimentoProvider.itemsList[i].litroAbastecimento.toString();
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {

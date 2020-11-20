@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var alcoolController = TextEditingController();
     var gasolinaController = TextEditingController();
     String resultado = "";
+    var list;
 
     String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
       double resultGasolina = valorGasolina * 0.7;
@@ -254,6 +255,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (ctx, i) {
                     _info['hodometroAnterior'] =
                         abastecimentoProvider.itemsList[i].hodometroAtual;
+                    _info['valor'] =
+                        abastecimentoProvider.itemsList[i].valorAbastecimento;
+                    _info['litros'] =
+                        abastecimentoProvider.itemsList[i].litroAbastecimento;
+                    _info['tipoCombustivel'] =
+                        abastecimentoProvider.itemsList[i].tipoCombustivel;
+                    // _info['index'] = abastecimentoProvider.itemsList[i];
                     return InkWell(
                       onTap: () {
                         Navigator.of(context).pushNamed(
