@@ -8,6 +8,7 @@ class Abastecimento with ChangeNotifier {
   double litroAbastecimento;
   String tipoCombustivel;
   double hodometroAtual;
+  double hodometroAnterior;
   DateTime dateTime;
   double despesasDoMes;
   double ultimaMedia;
@@ -18,6 +19,7 @@ class Abastecimento with ChangeNotifier {
       this.litroAbastecimento,
       this.tipoCombustivel,
       this.hodometroAtual,
+      this.hodometroAnterior,
       this.dateTime,
       this.despesasDoMes,
       this.ultimaMedia});

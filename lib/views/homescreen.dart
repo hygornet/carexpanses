@@ -9,12 +9,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   bool isContainUltimaMedia() {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
     if (abastecimentoProvider.ultimaMedia == null) {
@@ -35,10 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var alcoolController = TextEditingController();
-    var gasolinaController = TextEditingController();
     String resultado = "";
-    var list;
 
     String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
       double resultGasolina = valorGasolina * 0.7;
@@ -53,12 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
-
-    Map<String, Object> _info = Map<String, Object>();
-    _info = {
-      'hodometroAnterior': 0,
-      'valorTotalGastos': abastecimentoProvider.despesasDoMes,
-    };
 
     return Scaffold(
       appBar: AppBar(
@@ -167,16 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 80,
                         child: RaisedButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.SCREEN_ABASTECER,
-                                    arguments: _info)
-                                .then((value) {
-                              setState(() {
-                                _info = value;
-                              });
-                              print('Recebimento da outra tela: ' +
-                                  _info.toString());
-                            });
+                            Navigator.of(context).pushNamed(
+                                AppRoutes.SCREEN_ABASTECER,
+                                arguments: abastecimentoProvider);
                           },
                           color: Colors.white,
                           child: Column(
@@ -253,20 +231,20 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.builder(
                   itemCount: abastecimentoProvider.countList,
                   itemBuilder: (ctx, i) {
-                    _info['hodometroAnterior'] =
-                        abastecimentoProvider.itemsList[i].hodometroAtual;
-                    _info['valor'] =
-                        abastecimentoProvider.itemsList[i].valorAbastecimento;
-                    _info['litros'] =
-                        abastecimentoProvider.itemsList[i].litroAbastecimento;
-                    _info['tipoCombustivel'] =
-                        abastecimentoProvider.itemsList[i].tipoCombustivel;
+                    // _info['hodometroAnterior'] =
+                    //     abastecimentoProvider.itemsList[i].hodometroAtual;
+                    // _info['valor'] =
+                    //     abastecimentoProvider.itemsList[i].valorAbastecimento;
+                    // _info['litros'] =
+                    //     abastecimentoProvider.itemsList[i].litroAbastecimento;
+                    // _info['tipoCombustivel'] =
+                    //     abastecimentoProvider.itemsList[i].tipoCombustivel;
                     // _info['index'] = abastecimentoProvider.itemsList[i];
                     return InkWell(
                       onTap: () {
                         Navigator.of(context).pushNamed(
                             AppRoutes.SCREEN_ABASTECER,
-                            arguments: _info);
+                            arguments: abastecimentoProvider.itemsList[i]);
                       },
                       child: ListTile(
                         leading: Icon(Icons.directions_car),
