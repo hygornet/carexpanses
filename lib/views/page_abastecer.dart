@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:despesascar/models/abastecimento.dart';
+import 'package:despesascar/routes/approutes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
       tipoCombustivelController.text = receivedInfoAbastecer.tipoCombustivel;
     } else {
       hodometroAtualController.text =
-          abastecimentoProvider.ultimoHodometro.toString();
+          abastecimentoProvider.ultimoHodometro.hodometroAtual.toString();
     }
   }
 
@@ -86,7 +87,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
     }
 
     bool verificar() {
-      if (abastecimentoProvider.ultimoHodometro.toString() == null) {
+      if (abastecimentoProvider.ultimoHodometro.hodometroAtual == null) {
         return false;
       } else {
         return true;
@@ -199,7 +200,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     SizedBox(height: 5),
                     verificar()
                         ? Text(
-                            'Hodometro anterior: ${abastecimentoProvider.ultimoHodometro.toString() ?? 0}')
+                            'Hodometro anterior: ${abastecimentoProvider.ultimoHodometro.hodometroAtual.toString() ?? 0}')
                         : Text('Hodometro anterior: 0'),
                     SizedBox(height: 5),
                     TextFormField(
@@ -254,7 +255,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
 
-                    print(abastecimentoProvider.ultimoHodometro.toString());
+                    print(abastecimentoProvider.ultimoHodometro.hodometroAtual
+                        .toString());
 
                     // if (abastecimentoProvider.hodometroAnterior != 0) {
                     //   calculoUltimaMedia = abastecer.hodometroAtual -
