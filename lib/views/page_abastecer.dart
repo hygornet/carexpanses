@@ -34,8 +34,12 @@ class _PageAbastecerState extends State<PageAbastecer> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+
     final receivedInfoAbastecer =
         ModalRoute.of(context).settings.arguments as Abastecimento;
+
+    final abastecimentoProvider =
+        Provider.of<Abastecimento>(context, listen: false);
 
     if (receivedInfoAbastecer.id != null) {
       valorController.text =
@@ -45,12 +49,18 @@ class _PageAbastecerState extends State<PageAbastecer> {
       hodometroAtualController.text =
           receivedInfoAbastecer.hodometroAtual.toString();
       tipoCombustivelController.text = receivedInfoAbastecer.tipoCombustivel;
+    } else {
+      hodometroAtualController.text =
+          abastecimentoProvider.ultimoHodometro.toString();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
+
+    final receivedInfoAbastecer =
+        ModalRoute.of(context).settings.arguments as Abastecimento;
 
     Abastecimento abastecer = Abastecimento();
 
@@ -76,7 +86,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
     }
 
     bool verificar() {
-      if (abastecimentoProvider.hodometroAtual == null) {
+      if (abastecimentoProvider.ultimoHodometro.toString() == null) {
         return false;
       } else {
         return true;
@@ -189,7 +199,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     SizedBox(height: 5),
                     verificar()
                         ? Text(
-                            'Hodometro anterior: ${abastecimentoProvider.hodometroAtual.toString()}')
+                            'Hodometro anterior: ${abastecimentoProvider.ultimoHodometro.toString() ?? 0}')
                         : Text('Hodometro anterior: 0'),
                     SizedBox(height: 5),
                     TextFormField(
@@ -244,6 +254,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
                     print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
 
+                    print(abastecimentoProvider.ultimoHodometro.toString());
+
                     // if (abastecimentoProvider.hodometroAnterior != 0) {
                     //   calculoUltimaMedia = abastecer.hodometroAtual -
                     //       abastecimentoProvider.hodometroAnterior;
@@ -256,11 +268,9 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     //   abastecimentoProvider.ultimaMedia = guardaUltimaMedia;
                     //   abastecimentoProvider.despesasDoMes = totalValorGasto;
 
-                    //   Navigator.of(context).pop(
-                    //     _infoAbastecimento,
-                    //   );
+                    //   Navigator.of(context).pop();
                     // } else {
-                    //   Navigator.of(context).pop(_infoAbastecimento);
+                    //   Navigator.of(context).pop();
                     // }
                   },
                 ),

@@ -9,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Abastecimento abastecer = Abastecimento();
+
   bool isContainUltimaMedia() {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
     if (abastecimentoProvider.ultimaMedia == null) {
@@ -154,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             Navigator.of(context).pushNamed(
                                 AppRoutes.SCREEN_ABASTECER,
-                                arguments: abastecimentoProvider);
+                                arguments: abastecer);
                           },
                           color: Colors.white,
                           child: Column(
@@ -231,15 +233,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.builder(
                   itemCount: abastecimentoProvider.countList,
                   itemBuilder: (ctx, i) {
-                    // _info['hodometroAnterior'] =
-                    //     abastecimentoProvider.itemsList[i].hodometroAtual;
-                    // _info['valor'] =
-                    //     abastecimentoProvider.itemsList[i].valorAbastecimento;
-                    // _info['litros'] =
-                    //     abastecimentoProvider.itemsList[i].litroAbastecimento;
-                    // _info['tipoCombustivel'] =
-                    //     abastecimentoProvider.itemsList[i].tipoCombustivel;
-                    // _info['index'] = abastecimentoProvider.itemsList[i];
                     return InkWell(
                       onTap: () {
                         Navigator.of(context).pushNamed(
@@ -256,8 +249,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           abastecimentoProvider.itemsList[i].tipoCombustivel
                               .toString(),
                         ),
-                        trailing: Text(
-                            'R\$${abastecimentoProvider.itemsList[i].valorAbastecimento.toStringAsFixed(2)}'),
+                        trailing: Text(abastecimentoProvider
+                            .itemsList[i].valorAbastecimento
+                            .toString()),
                       ),
                     );
                   }),

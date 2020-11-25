@@ -28,6 +28,10 @@ class Abastecimento with ChangeNotifier {
 
   List<Abastecimento> get itemsList => [..._items];
 
+  double get ultimoHodometro {
+    return hodometroAtual;
+  }
+
   int get countList {
     return _items.length;
   }
