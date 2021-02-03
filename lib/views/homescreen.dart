@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fit: BoxFit.cover,
                             child: isContainUltimaMedia()
                                 ? Text(
-                                    '${abastecimentoProvider.ultimaMedia.toString()} km/l',
+                                    '${abastecimentoProvider.ultimaMedia.toStringAsFixed(2)} km/l',
                                     style: TextStyle(
                                         fontSize: 25, color: Colors.white),
                                   )
@@ -238,6 +238,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.of(context).pushNamed(
                             AppRoutes.SCREEN_ABASTECER,
                             arguments: abastecimentoProvider.itemsList[i]);
+                        // Navigator.of(context).pushNamed(
+                        //     AppRoutes.DETAIL_ABASTECIMENTO,
+                        //     arguments: abastecimentoProvider.itemsList[i]);
                       },
                       child: ListTile(
                         leading: Icon(Icons.directions_car),

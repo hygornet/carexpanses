@@ -25,11 +25,9 @@ class _PageAbastecerState extends State<PageAbastecer> {
   final format = DateFormat('dd-MM-yyyy');
   var dataAtual = DateTime.now();
 
-  double guardaSomarGastos = 0;
-  double totalValorGasto = 0;
+  double valorGasto = 0;
+  double totalDinheiroGastoMes = 0;
   int count = 0;
-  double calculoUltimaMedia;
-  double guardaUltimaMedia;
   double guardaUltimoHodometro = 0;
 
   @override
@@ -62,8 +60,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
         ModalRoute.of(context).settings.arguments as Abastecimento;
 
     Abastecimento abastecer = Abastecimento();
-
     guardaUltimoHodometro = abastecimentoProvider.hodometroAtual;
+    totalDinheiroGastoMes = abastecimentoProvider.valorAbastecimento;
 
     void addAbastecimento() {
       var isValid = _formKey.currentState.validate();
@@ -82,7 +80,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
         hodometroAnterior: double.parse(hodometroAtualController.text),
         tipoCombustivel: tipoCombustivelController.text,
         dateTime: dataAtual,
-        despesasDoMes: totalValorGasto,
+        despesasDoMes: totalDinheiroGastoMes,
       );
 
       abastecimentoProvider.adicionarAbastecimento(abastecer);
@@ -108,8 +106,12 @@ class _PageAbastecerState extends State<PageAbastecer> {
       return kmPercorrido / litros;
     }
 
-    double somarGastos(double value) {
-      return value;
+    bool isContainHodometroAnterior() {
+      if (abastecimentoProvider.hodometroAtual == null) {
+        return false;
+      } else {
+        return true;
+      }
     }
 
     return Scaffold(
@@ -201,8 +203,10 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           abastecer.hodometroAtual = double.parse(newValue),
                     ),
                     SizedBox(height: 5),
-                    Text('Hodometro anterior: ' +
-                        abastecimentoProvider.hodometroAtual.toString()),
+                    isContainHodometroAnterior()
+                        ? Text('Hodometro anterior: ' +
+                            abastecimentoProvider.hodometroAtual.toString())
+                        : Text("Hodometro anterior: 0"),
                     SizedBox(height: 5),
                     TextFormField(
                       controller: tipoCombustivelController,
@@ -237,35 +241,45 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
                     double litro = double.parse(litroController.text);
                     double valor = double.parse(valorController.text);
-                    guardaSomarGastos = somarGastos(valor);
-                    totalValorGasto += guardaSomarGastos;
 
                     limparCampos();
 
                     //PRINTS DE ACOMPANHAMENTO
 
+                    abastecimentoProvider.valorAbastecimento = valor;
+                    print('Valor (Provider): ' +
+                        abastecimentoProvider.valorAbastecimento.toString());
+
                     abastecimentoProvider.litroAbastecimento = litro;
                     print('Litro (Provider): ' +
                         abastecimentoProvider.litroAbastecimento.toString());
 
-                    abastecimentoProvider.valorAbastecimento = totalValorGasto;
-                    print('Valor Total Gasto (Provider): ' +
-                        abastecimentoProvider.valorAbastecimento.toString());
+                    abastecimentoProvider.hodometroAnterior =
+                        abastecer.hodometroAnterior;
+                    print("Hodometro Anterior (Provider): " +
+                        abastecimentoProvider.hodometroAtual.toString());
 
                     abastecimentoProvider.hodometroAtual =
                         abastecer.hodometroAtual;
                     print("Hodometro Atual (Provider): " +
                         abastecimentoProvider.hodometroAtual.toString());
 
-                    abastecimentoProvider.hodometroAnterior =
-                        abastecer.hodometroAnterior;
-                    print("Hodometro Anterior (Provider): " +
-                        abastecimentoProvider.hodometroAnterior.toString());
-
                     abastecimentoProvider.tipoCombustivel =
                         abastecer.tipoCombustivel;
                     print("Tipo de Combustivel (Provider): " +
                         abastecimentoProvider.tipoCombustivel);
+
+                    if (totalDinheiroGastoMes == null) {
+                      totalDinheiroGastoMes +=
+                          abastecimentoProvider.valorAbastecimento;
+
+                      print("Dinheiro: " + totalDinheiroGastoMes.toString());
+                    } else if (totalDinheiroGastoMes > 0) {
+                      totalDinheiroGastoMes +=
+                          abastecimentoProvider.valorAbastecimento;
+
+                      print("Dinheiro: " + totalDinheiroGastoMes.toString());
+                    }
 
                     if (abastecimentoProvider.countList > 1) {
                       abastecimentoProvider.ultimaMedia =
@@ -278,7 +292,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
               ),
               SizedBox(height: 20),
               Text('Nº de abastecimentos: ${count.toString()}'),
-              Text('Despesas do mês: R\$${totalValorGasto.toStringAsFixed(2)}'),
             ],
           ),
         ),

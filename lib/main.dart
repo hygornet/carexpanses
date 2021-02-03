@@ -1,5 +1,6 @@
 import 'package:despesascar/routes/approutes.dart';
 import 'package:despesascar/views/alcool_gasolina.dart';
+import 'package:despesascar/views/detail_abastecimento.dart';
 import 'package:despesascar/views/homescreen.dart';
 import 'package:despesascar/views/page_abastecer.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AppRoutes.SCREEN_ABASTECER: (ctx) => PageAbastecer(),
           AppRoutes.ALCOOL_GASOLINA: (ctx) => AlcoolGasolina(),
+          AppRoutes.DETAIL_ABASTECIMENTO: (ctx) => DetailAbastecimento(),
         },
       ),
     );
