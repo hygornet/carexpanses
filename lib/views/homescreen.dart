@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fit: BoxFit.cover,
                             child: isContainUltimaMedia()
                                 ? Text(
-                                    '${abastecimentoProvider.ultimaMedia.toStringAsFixed(2)} km/l',
+                                    '${abastecimentoProvider.ultimaMedia.toString()} km/l',
                                     style: TextStyle(
                                         fontSize: 25, color: Colors.white),
                                   )

@@ -12,6 +12,7 @@ class Abastecimento with ChangeNotifier {
   DateTime dateTime;
   double despesasDoMes;
   double ultimaMedia;
+  double tempAbastecimento;
 
   Abastecimento(
       {this.id,
@@ -22,15 +23,12 @@ class Abastecimento with ChangeNotifier {
       this.hodometroAnterior,
       this.dateTime,
       this.despesasDoMes,
-      this.ultimaMedia});
+      this.ultimaMedia,
+      this.tempAbastecimento});
 
   List<Abastecimento> _items = [];
 
   List<Abastecimento> get itemsList => [..._items];
-
-  Abastecimento get ultimoHodometro {
-    return _items.last;
-  }
 
   int get countList {
     return _items.length;
@@ -42,6 +40,7 @@ class Abastecimento with ChangeNotifier {
       valorAbastecimento: abastecimento.valorAbastecimento,
       litroAbastecimento: abastecimento.litroAbastecimento,
       hodometroAtual: abastecimento.hodometroAtual,
+      hodometroAnterior: abastecimento.hodometroAtual,
       tipoCombustivel: abastecimento.tipoCombustivel,
       dateTime: abastecimento.dateTime,
       despesasDoMes: abastecimento.despesasDoMes,

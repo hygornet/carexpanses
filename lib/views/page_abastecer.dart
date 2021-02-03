@@ -30,6 +30,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
   int count = 0;
   double calculoUltimaMedia;
   double guardaUltimaMedia;
+  double guardaUltimoHodometro = 0;
 
   @override
   void didChangeDependencies() {
@@ -50,9 +51,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
       hodometroAtualController.text =
           receivedInfoAbastecer.hodometroAtual.toString();
       tipoCombustivelController.text = receivedInfoAbastecer.tipoCombustivel;
-    } else {
-      hodometroAtualController.text =
-          abastecimentoProvider.ultimoHodometro.hodometroAtual.toString();
     }
   }
 
@@ -65,6 +63,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
     Abastecimento abastecer = Abastecimento();
 
+    guardaUltimoHodometro = abastecimentoProvider.hodometroAtual;
+
     void addAbastecimento() {
       var isValid = _formKey.currentState.validate();
 
@@ -73,11 +73,13 @@ class _PageAbastecerState extends State<PageAbastecer> {
       }
 
       _formKey.currentState.save();
+
       abastecer = Abastecimento(
         id: Random().nextInt(1000),
         valorAbastecimento: double.parse(valorController.text),
         litroAbastecimento: double.parse(litroController.text),
         hodometroAtual: double.parse(hodometroAtualController.text),
+        hodometroAnterior: double.parse(hodometroAtualController.text),
         tipoCombustivel: tipoCombustivelController.text,
         dateTime: dataAtual,
         despesasDoMes: totalValorGasto,
@@ -86,11 +88,12 @@ class _PageAbastecerState extends State<PageAbastecer> {
       abastecimentoProvider.adicionarAbastecimento(abastecer);
     }
 
-    bool verificar() {
-      if (abastecimentoProvider.ultimoHodometro.hodometroAtual == null) {
-        return false;
-      } else {
-        return true;
+    double diferencaHodometro() {
+      if (guardaUltimoHodometro == null) {
+        guardaUltimoHodometro = 0;
+        return abastecimentoProvider.hodometroAnterior - guardaUltimoHodometro;
+      } else if (guardaUltimoHodometro != 0) {
+        return abastecimentoProvider.hodometroAnterior - guardaUltimoHodometro;
       }
     }
 
@@ -198,10 +201,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           abastecer.hodometroAtual = double.parse(newValue),
                     ),
                     SizedBox(height: 5),
-                    verificar()
-                        ? Text(
-                            'Hodometro anterior: ${abastecimentoProvider.ultimoHodometro.hodometroAtual.toString() ?? 0}')
-                        : Text('Hodometro anterior: 0'),
+                    Text('Hodometro anterior: ' +
+                        abastecimentoProvider.hodometroAtual.toString()),
                     SizedBox(height: 5),
                     TextFormField(
                       controller: tipoCombustivelController,
@@ -223,7 +224,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
                   ],
                 ),
               ),
-
               SizedBox(height: 5),
               Container(
                 width: double.infinity,
@@ -242,43 +242,41 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
                     limparCampos();
 
+                    //PRINTS DE ACOMPANHAMENTO
+
+                    abastecimentoProvider.litroAbastecimento = litro;
+                    print('Litro (Provider): ' +
+                        abastecimentoProvider.litroAbastecimento.toString());
+
                     abastecimentoProvider.valorAbastecimento = totalValorGasto;
-                    // _infoAbastecimento['valorTotalGastos'] = totalValorGasto;
                     print('Valor Total Gasto (Provider): ' +
                         abastecimentoProvider.valorAbastecimento.toString());
 
-                    // print('Hodometro Anterior (Provider)' +
-                    //     abastecimentoProvider.hodometroAnterior.toString());
+                    abastecimentoProvider.hodometroAtual =
+                        abastecer.hodometroAtual;
+                    print("Hodometro Atual (Provider): " +
+                        abastecimentoProvider.hodometroAtual.toString());
 
-                    print("Hodometro Atual: " +
-                        abastecer.hodometroAtual.toString());
+                    abastecimentoProvider.hodometroAnterior =
+                        abastecer.hodometroAnterior;
+                    print("Hodometro Anterior (Provider): " +
+                        abastecimentoProvider.hodometroAnterior.toString());
 
-                    print("Tipo de Combustivel: " + abastecer.tipoCombustivel);
+                    abastecimentoProvider.tipoCombustivel =
+                        abastecer.tipoCombustivel;
+                    print("Tipo de Combustivel (Provider): " +
+                        abastecimentoProvider.tipoCombustivel);
 
-                    print(abastecimentoProvider.ultimoHodometro.hodometroAtual
-                        .toString());
+                    if (abastecimentoProvider.countList > 1) {
+                      abastecimentoProvider.ultimaMedia =
+                          ultimaMedia(diferencaHodometro(), litro);
+                    }
 
-                    // if (abastecimentoProvider.hodometroAnterior != 0) {
-                    //   calculoUltimaMedia = abastecer.hodometroAtual -
-                    //       abastecimentoProvider.hodometroAnterior;
-                    //   print("calculo: " + calculoUltimaMedia.toString());
-                    //   guardaUltimaMedia =
-                    //       ultimaMedia(calculoUltimaMedia, litro);
-                    //   print("ultima media: " + guardaUltimaMedia.toString());
-                    //   print("------------------------------------");
-
-                    //   abastecimentoProvider.ultimaMedia = guardaUltimaMedia;
-                    //   abastecimentoProvider.despesasDoMes = totalValorGasto;
-
-                    //   Navigator.of(context).pop();
-                    // } else {
-                    //   Navigator.of(context).pop();
-                    // }
+                    Navigator.of(context).pop();
                   },
                 ),
               ),
               SizedBox(height: 20),
-              // Text('Última média: ${calcularUltimaMedia.toString()}'),
               Text('Nº de abastecimentos: ${count.toString()}'),
               Text('Despesas do mês: R\$${totalValorGasto.toStringAsFixed(2)}'),
             ],
