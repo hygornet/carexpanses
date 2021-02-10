@@ -83,7 +83,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
         dateTime: dataAtual,
         despesasDoMes: totalDinheiroGastoMes,
       );
-      print(format.format(abastecer.dateTime));
       abastecimentoProvider.adicionarAbastecimento(abastecer);
     }
 
