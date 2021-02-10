@@ -235,12 +235,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (ctx, i) {
                     return InkWell(
                       onTap: () {
-                        Navigator.of(context).pushNamed(
-                            AppRoutes.SCREEN_ABASTECER,
-                            arguments: abastecimentoProvider.itemsList[i]);
                         // Navigator.of(context).pushNamed(
-                        //     AppRoutes.DETAIL_ABASTECIMENTO,
+                        //     AppRoutes.SCREEN_ABASTECER,
                         //     arguments: abastecimentoProvider.itemsList[i]);
+                        Navigator.of(context).pushNamed(
+                            AppRoutes.DETAIL_ABASTECIMENTO,
+                            arguments: abastecimentoProvider.itemsList[i]);
                       },
                       child: ListTile(
                         leading: Icon(Icons.directions_car),

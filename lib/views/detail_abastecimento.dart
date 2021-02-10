@@ -1,12 +1,22 @@
 import 'package:despesascar/models/abastecimento.dart';
 import 'package:despesascar/routes/approutes.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DetailAbastecimento extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final abastecimentoProvider = Provider.of<List<Abastecimento>>(context);
+    final format = DateFormat('dd/MM/yyyy hh:mm');
+    var dataAtual = DateTime.now();
+
+    final abastecimento =
+        ModalRoute.of(context).settings.arguments as Abastecimento;
+
+    final abastecimentoProvider = Provider.of<Abastecimento>(context);
+
+    double precoPorLitragem =
+        abastecimento.valorAbastecimento / abastecimento.litroAbastecimento;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,16 +48,59 @@ class DetailAbastecimento extends StatelessWidget {
             ),
           ],
         ),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
       ),
-      body: Column(
-        children: [
-          Text(
-              'Valor do Abastecimento: ${abastecimentoProvider[0].valorAbastecimento}'),
-          Text(
-              'Quantidade de Litros: ${abastecimentoProvider[0].litroAbastecimento}'),
-          Text('Combustivel: ${abastecimentoProvider[0].tipoCombustivel}'),
-          Text('Hodometro: ${abastecimentoProvider[0].hodometroAtual}'),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Data do Abastecimento: '),
+                Text(format.format(abastecimento.dateTime)),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Valor do Abastecimento: '),
+                Text(
+                    'R\$ ${abastecimento.valorAbastecimento.toStringAsFixed(2)}'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Litros: '),
+                Text(abastecimento.litroAbastecimento.toStringAsFixed(2)),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Tipo de Combustível: '),
+                Text(abastecimento.tipoCombustivel),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Preço por Litro: '),
+                Text('R\$ ${precoPorLitragem.toStringAsFixed(2)}'),
+              ],
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.SCREEN_ABASTECER,
+                    arguments: abastecimento);
+              },
+              child: Text("Alterar dados"),
+            ),
+          ],
+        ),
       ),
     );
   }
