@@ -22,7 +22,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
   var tipoCombustivelController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
 
-  final format = DateFormat('dd-MM-yyyy');
+  final format = DateFormat('dd-MM-yyyy hh:mm a');
   var dataAtual = DateTime.now();
 
   double valorGasto = 0;
@@ -83,7 +83,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
         dateTime: dataAtual,
         despesasDoMes: totalDinheiroGastoMes,
       );
-
+      print(format.format(abastecer.dateTime));
       abastecimentoProvider.adicionarAbastecimento(abastecer);
     }
 
