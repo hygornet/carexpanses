@@ -26,6 +26,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
   var dataAtual = DateTime.now();
 
   double valorGasto = 0;
+  double guardarUltimoValor = 0;
   double totalDinheiroGastoMes = 0;
   int count = 0;
   double guardaUltimoHodometro = 0;
@@ -61,7 +62,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
 
     Abastecimento abastecer = Abastecimento();
     guardaUltimoHodometro = abastecimentoProvider.hodometroAtual;
-    totalDinheiroGastoMes = abastecimentoProvider.valorAbastecimento;
+    guardarUltimoValor = abastecimentoProvider.valorAbastecimento;
 
     void addAbastecimento() {
       var isValid = _formKey.currentState.validate();
@@ -92,6 +93,15 @@ class _PageAbastecerState extends State<PageAbastecer> {
         return abastecimentoProvider.hodometroAnterior - guardaUltimoHodometro;
       } else if (guardaUltimoHodometro != 0) {
         return abastecimentoProvider.hodometroAnterior - guardaUltimoHodometro;
+      }
+    }
+
+    double somarGastos() {
+      if (guardarUltimoValor == null) {
+        guardarUltimoValor = 0;
+        return abastecimentoProvider.valorAbastecimento += guardarUltimoValor;
+      } else if (guardaUltimoHodometro != 0) {
+        return abastecimentoProvider.valorAbastecimento += guardarUltimoValor;
       }
     }
 
@@ -269,17 +279,10 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     print("Tipo de Combustivel (Provider): " +
                         abastecimentoProvider.tipoCombustivel);
 
-                    if (totalDinheiroGastoMes == null) {
-                      totalDinheiroGastoMes +=
-                          abastecimentoProvider.valorAbastecimento;
+                    print("Provider Valor: " +
+                        abastecimentoProvider.valorAbastecimento.toString());
 
-                      print("Dinheiro: " + totalDinheiroGastoMes.toString());
-                    } else if (totalDinheiroGastoMes > 0) {
-                      totalDinheiroGastoMes +=
-                          abastecimentoProvider.valorAbastecimento;
-
-                      print("Dinheiro: " + totalDinheiroGastoMes.toString());
-                    }
+                    abastecimentoProvider.despesasDoMes = somarGastos();
 
                     if (abastecimentoProvider.countList > 1) {
                       abastecimentoProvider.ultimaMedia =

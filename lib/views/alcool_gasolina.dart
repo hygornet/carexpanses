@@ -19,17 +19,15 @@ var gasolinaController = MoneyMaskedTextController(
   decimalSeparator: '.',
 );
 String informacaoMelhorAbastecerCom =
-    "O cálculo básico para se descobrir se o álcool é vantajoso ou não em relação à gasolina é simples. Basta dividir o preço do litro do etanol pelo da gasolina. Se o resultado for inferior a 0,7, o álcool é o melhor para abastecer. Se for maior que 0,7, então a gasolina é melhor.";
+    "Caso queira fazer esse cálculo sem o auxílio da ferramenta, a conta é simples: basta dividir o valor do litro do álcool pelo da gasolina. Se o resultado for menor que 0,7, abasteça com álcool. Se maior, escolha a gasolina. Exemplo: se o álcool custa R\$ 1,45 e a gasolina, R\$ 2,90, o resultado da divisão do primeiro pelo segundo é 0,5, menor que 0,7. Logo, mais vantajoso abastecer com álcool.";
 
 String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
-  double resultGasolina = valorGasolina * 0.7;
+  double resultGasolina = valorGasolina / valorAlcool;
   var r = double.parse(resultGasolina.toStringAsFixed(2));
-  if (r < valorAlcool) {
+  if (r <= 0.73) {
     resultado = 'Abasteça com álcool!';
-  } else if (r > valorAlcool) {
+  } else if (r >= 0.74) {
     resultado = 'Abasteça com gasolina!';
-  } else if (r == valorAlcool) {
-    resultado = 'Os dois tem o mesmo custo benefício.';
   }
   return resultado;
 }
