@@ -251,15 +251,16 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     abastecimentoProvider.hodometroAnterior =
                         abastecer.hodometroAnterior;
 
-                    limparCampos();
-
+                    //Função que soma os gastos do mês.
                     abastecimentoProvider.despesasDoMes = somarGastos();
 
+                    //Verifica se a lista tem mais de um item, se tiver, faz o calculo da média.
                     if (abastecimentoProvider.countList > 1) {
                       abastecimentoProvider.ultimaMedia =
                           ultimaMedia(diferencaHodometro(), litro);
                     }
 
+                    limparCampos();
                     Navigator.of(context).pop();
                   },
                 ),
