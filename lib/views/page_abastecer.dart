@@ -39,9 +39,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
     final receivedInfoAbastecer =
         ModalRoute.of(context).settings.arguments as Abastecimento;
 
-    final abastecimentoProvider =
-        Provider.of<Abastecimento>(context, listen: false);
-
     if (receivedInfoAbastecer.id != null) {
       valorController.text =
           receivedInfoAbastecer.valorAbastecimento.toString();
@@ -56,9 +53,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
   @override
   Widget build(BuildContext context) {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
-
-    final receivedInfoAbastecer =
-        ModalRoute.of(context).settings.arguments as Abastecimento;
 
     Abastecimento abastecer = Abastecimento();
     guardaUltimoHodometro = abastecimentoProvider.hodometroAtual;
@@ -244,42 +238,20 @@ class _PageAbastecerState extends State<PageAbastecer> {
                   child: Text('Calcular'),
                   onPressed: () {
                     setState(() {
-                      count++;
                       addAbastecimento();
                     });
 
                     double litro = double.parse(litroController.text);
                     double valor = double.parse(valorController.text);
 
-                    limparCampos();
-
-                    //PRINTS DE ACOMPANHAMENTO
-
+                    //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
                     abastecimentoProvider.valorAbastecimento = valor;
-                    print('Valor (Provider): ' +
-                        abastecimentoProvider.valorAbastecimento.toString());
 
-                    abastecimentoProvider.litroAbastecimento = litro;
-                    print('Litro (Provider): ' +
-                        abastecimentoProvider.litroAbastecimento.toString());
-
+                    //Declaro o valor do hodometro anterior para função diferencaHodometro() funcionar.
                     abastecimentoProvider.hodometroAnterior =
                         abastecer.hodometroAnterior;
-                    print("Hodometro Anterior (Provider): " +
-                        abastecimentoProvider.hodometroAtual.toString());
 
-                    abastecimentoProvider.hodometroAtual =
-                        abastecer.hodometroAtual;
-                    print("Hodometro Atual (Provider): " +
-                        abastecimentoProvider.hodometroAtual.toString());
-
-                    abastecimentoProvider.tipoCombustivel =
-                        abastecer.tipoCombustivel;
-                    print("Tipo de Combustivel (Provider): " +
-                        abastecimentoProvider.tipoCombustivel);
-
-                    print("Provider Valor: " +
-                        abastecimentoProvider.valorAbastecimento.toString());
+                    limparCampos();
 
                     abastecimentoProvider.despesasDoMes = somarGastos();
 
@@ -292,8 +264,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
-              Text('Nº de abastecimentos: ${count.toString()}'),
             ],
           ),
         ),
@@ -301,3 +271,31 @@ class _PageAbastecerState extends State<PageAbastecer> {
     );
   }
 }
+
+//PRINTS DE ACOMPANHAMENTO
+
+// abastecimentoProvider.valorAbastecimento = valor;
+// print('Valor (Provider): ' +
+//     abastecimentoProvider.valorAbastecimento.toString());
+
+// abastecimentoProvider.litroAbastecimento = litro;
+// print('Litro (Provider): ' +
+//     abastecimentoProvider.litroAbastecimento.toString());
+
+// abastecimentoProvider.hodometroAnterior =
+//     abastecer.hodometroAnterior;
+// print("Hodometro Anterior (Provider): " +
+//     abastecimentoProvider.hodometroAtual.toString());
+
+// abastecimentoProvider.hodometroAtual =
+//     abastecer.hodometroAtual;
+// print("Hodometro Atual (Provider): " +
+//     abastecimentoProvider.hodometroAtual.toString());
+
+// abastecimentoProvider.tipoCombustivel =
+//     abastecer.tipoCombustivel;
+// print("Tipo de Combustivel (Provider): " +
+//     abastecimentoProvider.tipoCombustivel);
+
+// print("Provider Valor: " +
+//     abastecimentoProvider.valorAbastecimento.toString());
