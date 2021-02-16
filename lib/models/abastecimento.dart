@@ -47,4 +47,17 @@ class Abastecimento with ChangeNotifier {
     ));
     notifyListeners();
   }
+
+  void atualizarAbastecimento(Abastecimento abastecimento) {
+    if (abastecimento.id == null && abastecimento == null) {
+      return;
+    }
+
+    final index = _items.indexWhere((prod) => prod.id == abastecimento.id);
+
+    if (index >= 0) {
+      _items[index] = abastecimento;
+      notifyListeners();
+    }
+  }
 }

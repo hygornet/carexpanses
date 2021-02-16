@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:despesascar/models/abastecimento.dart';
-import 'package:despesascar/routes/approutes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +20,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
   var dateTimeController = TextEditingController();
   var tipoCombustivelController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
+  var _formData = Map<String, Object>();
 
   final format = DateFormat('dd-MM-yyyy hh:mm a');
   var dataAtual = DateTime.now();
@@ -31,54 +31,45 @@ class _PageAbastecerState extends State<PageAbastecer> {
   int count = 0;
   double guardaUltimoHodometro = 0;
 
+  void limparCampos() {
+    valorController.text = "";
+    litroController.text = "";
+    hodometroAtualController.text = "";
+    tipoCombustivelController.text = "";
+  }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
-    final receivedInfoAbastecer =
-        ModalRoute.of(context).settings.arguments as Abastecimento;
+    if (_formData.isEmpty) {
+      final receivedInfoAbastecer =
+          ModalRoute.of(context).settings.arguments as Abastecimento;
 
-    if (receivedInfoAbastecer.id != null) {
-      valorController.text =
-          receivedInfoAbastecer.valorAbastecimento.toString();
-      litroController.text =
-          receivedInfoAbastecer.litroAbastecimento.toString();
-      hodometroAtualController.text =
-          receivedInfoAbastecer.hodometroAtual.toString();
-      tipoCombustivelController.text = receivedInfoAbastecer.tipoCombustivel;
+      if (receivedInfoAbastecer != null) {
+        _formData['id'] = receivedInfoAbastecer.id;
+        _formData['valorAbastecimento'] =
+            receivedInfoAbastecer.valorAbastecimento;
+        _formData['litroAbastecimento'] =
+            receivedInfoAbastecer.litroAbastecimento;
+        _formData['hodometroAtual'] = receivedInfoAbastecer.hodometroAtual;
+        _formData['tipoCombustivel'] = receivedInfoAbastecer.tipoCombustivel;
+      }
     }
+
+    valorController.text = _formData['valorAbastecimento'].toString();
+    litroController.text = _formData['litroAbastecimento'].toString();
+    hodometroAtualController.text = _formData['hodometroAtual'].toString();
+    tipoCombustivelController.text = _formData['tipoCombustivel'].toString();
   }
 
   @override
   Widget build(BuildContext context) {
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
 
-    Abastecimento abastecer = Abastecimento();
     guardaUltimoHodometro = abastecimentoProvider.hodometroAtual;
     guardarUltimoValor = abastecimentoProvider.valorAbastecimento;
-
-    void addAbastecimento() {
-      var isValid = _formKey.currentState.validate();
-
-      if (!isValid) {
-        return;
-      }
-
-      _formKey.currentState.save();
-
-      abastecer = Abastecimento(
-        id: Random().nextInt(1000),
-        valorAbastecimento: double.parse(valorController.text),
-        litroAbastecimento: double.parse(litroController.text),
-        hodometroAtual: double.parse(hodometroAtualController.text),
-        hodometroAnterior: double.parse(hodometroAtualController.text),
-        tipoCombustivel: tipoCombustivelController.text,
-        dateTime: dataAtual,
-        despesasDoMes: totalDinheiroGastoMes,
-      );
-      abastecimentoProvider.adicionarAbastecimento(abastecer);
-    }
 
     double diferencaHodometro() {
       if (guardaUltimoHodometro == null) {
@@ -98,15 +89,67 @@ class _PageAbastecerState extends State<PageAbastecer> {
       }
     }
 
-    void limparCampos() {
-      valorController.text = "";
-      litroController.text = "";
-      hodometroAtualController.text = "";
-      tipoCombustivelController.text = "";
+    double atualizarGastos() {
+      if (guardarUltimoValor == null) {
+        guardarUltimoValor = 0;
+        return abastecimentoProvider.valorAbastecimento = guardarUltimoValor;
+      } else if (guardaUltimoHodometro != 0) {
+        return abastecimentoProvider.valorAbastecimento = guardarUltimoValor;
+      }
     }
 
     double ultimaMedia(double kmPercorrido, double litros) {
       return kmPercorrido / litros;
+    }
+
+    void addAbastecimento() {
+      var isValid = _formKey.currentState.validate();
+
+      if (!isValid) {
+        return;
+      }
+
+      _formKey.currentState.save();
+
+      final abastecer = Abastecimento(
+        id: _formData['id'],
+        valorAbastecimento: _formData['valorAbastecimento'],
+        litroAbastecimento: _formData['litroAbastecimento'],
+        hodometroAtual: _formData['hodometroAtual'],
+        hodometroAnterior: _formData['hodometroAnterior'],
+        tipoCombustivel: _formData['tipoCombustivel'],
+        dateTime: _formData['dataAtual'],
+        despesasDoMes: _formData['despesasMes'],
+      );
+
+      final a = Provider.of<Abastecimento>(context, listen: false);
+      if (_formData['id'] == null) {
+        a.adicionarAbastecimento(abastecer);
+        double litro = double.parse(litroController.text);
+        double valor = double.parse(valorController.text);
+
+        //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
+        abastecimentoProvider.valorAbastecimento =
+            _formData['valorAbastecimento'];
+
+        //Atribuido o valor do hodometro ao abastecimentoProvider para ficar registrado o ultimo hodometro cadastrado.
+        abastecimentoProvider.hodometroAtual = _formData['hodometroAtual'];
+
+        //Declaro o valor do hodometro anterior para função diferencaHodometro() funcionar.
+        abastecimentoProvider.hodometroAnterior = _formData['hodometroAtual'];
+
+        //Função que soma os gastos do mês.
+        abastecimentoProvider.despesasDoMes = somarGastos();
+
+        //Verifica se a lista tem mais de um item, se tiver, faz o calculo da média.
+        if (abastecimentoProvider.countList > 1) {
+          abastecimentoProvider.ultimaMedia =
+              ultimaMedia(diferencaHodometro(), litro);
+        }
+        print('ITENS LISTA: ${abastecimentoProvider.countList}');
+      } else {
+        a.atualizarAbastecimento(abastecer);
+      }
     }
 
     bool isContainHodometroAnterior() {
@@ -164,8 +207,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           return 'Digite o valor do abastecimento.';
                         }
                       },
-                      onSaved: (newValue) =>
-                          abastecer.valorAbastecimento = double.parse(newValue),
+                      onSaved: (newValue) => _formData['valorAbastecimento'] =
+                          double.parse(newValue),
                     ),
                     SizedBox(height: 5),
                     TextFormField(
@@ -183,8 +226,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
                           return 'Digite a quantidade de litros que entrou em seu veículo';
                         }
                       },
-                      onSaved: (newValue) =>
-                          abastecer.litroAbastecimento = double.parse(newValue),
+                      onSaved: (newValue) => _formData['litroAbastecimento'] =
+                          double.parse(newValue),
                     ),
                     SizedBox(height: 5),
                     TextFormField(
@@ -203,7 +246,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                         }
                       },
                       onSaved: (newValue) =>
-                          abastecer.hodometroAtual = double.parse(newValue),
+                          _formData['hodometroAtual'] = double.parse(newValue),
                     ),
                     SizedBox(height: 5),
                     isContainHodometroAnterior()
@@ -220,7 +263,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                         labelText: 'Tipo de Combustível',
                       ),
                       onSaved: (newValue) =>
-                          abastecer.tipoCombustivel = newValue,
+                          _formData['tipoCombustivel'] = newValue,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Qual combustivel escolheu neste abastecimento?';
@@ -237,29 +280,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
                 child: RaisedButton(
                   child: Text('Calcular'),
                   onPressed: () {
-                    setState(() {
-                      addAbastecimento();
-                    });
-
-                    double litro = double.parse(litroController.text);
-                    double valor = double.parse(valorController.text);
-
-                    //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
-                    abastecimentoProvider.valorAbastecimento = valor;
-
-                    //Declaro o valor do hodometro anterior para função diferencaHodometro() funcionar.
-                    abastecimentoProvider.hodometroAnterior =
-                        abastecer.hodometroAnterior;
-
-                    //Função que soma os gastos do mês.
-                    abastecimentoProvider.despesasDoMes = somarGastos();
-
-                    //Verifica se a lista tem mais de um item, se tiver, faz o calculo da média.
-                    if (abastecimentoProvider.countList > 1) {
-                      abastecimentoProvider.ultimaMedia =
-                          ultimaMedia(diferencaHodometro(), litro);
-                    }
-
+                    addAbastecimento();
                     limparCampos();
                     Navigator.of(context).pop();
                   },

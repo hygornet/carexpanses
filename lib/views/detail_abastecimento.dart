@@ -7,13 +7,12 @@ import 'package:provider/provider.dart';
 class DetailAbastecimento extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final format = DateFormat('dd/MM/yyyy hh:mm');
-    var dataAtual = DateTime.now();
+    // final format = DateFormat('dd/MM/yyyy hh:mm');
+    // var dataAtual = DateTime.now();
 
     final abastecimento =
         ModalRoute.of(context).settings.arguments as Abastecimento;
-
-    final abastecimentoProvider = Provider.of<Abastecimento>(context);
+    print('ID: ${abastecimento.id}');
 
     double precoPorLitragem =
         abastecimento.valorAbastecimento / abastecimento.litroAbastecimento;
@@ -60,7 +59,7 @@ class DetailAbastecimento extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Data do Abastecimento: '),
-                Text(format.format(abastecimento.dateTime)),
+                // Text(format.format(abastecimento.dateTime)),
               ],
             ),
             Row(
