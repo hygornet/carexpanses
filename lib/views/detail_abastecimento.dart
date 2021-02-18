@@ -98,6 +98,14 @@ class DetailAbastecimento extends StatelessWidget {
               },
               child: Text("Alterar dados"),
             ),
+            RaisedButton(
+              onPressed: () {
+                Provider.of<Abastecimento>(context, listen: false)
+                    .deletarAbastecimento(abastecimento.id);
+                Navigator.of(context).pop();
+              },
+              child: Text("Excluir"),
+            ),
           ],
         ),
       ),

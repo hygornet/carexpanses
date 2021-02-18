@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     String resultado = "";
+    var _key = GlobalKey<FormState>();
 
     String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
       double resultGasolina = valorGasolina * 0.7;
@@ -229,36 +230,56 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: abastecimentoProvider.countList,
-                  itemBuilder: (ctx, i) {
-                    return InkWell(
-                      onTap: () {
-                        // Navigator.of(context).pushNamed(
-                        //     AppRoutes.SCREEN_ABASTECER,
-                        //     arguments: abastecimentoProvider.itemsList[i]);
-                        Navigator.of(context).pushNamed(
-                            AppRoutes.DETAIL_ABASTECIMENTO,
-                            arguments: abastecimentoProvider.itemsList[i]);
-                      },
-                      child: ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text(
-                          'Abastecimento',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+            abastecimentoProvider.countList > 0
+                ? Expanded(
+                    child: ListView.builder(
+                        itemCount: abastecimentoProvider.countList,
+                        itemBuilder: (ctx, i) {
+                          return InkWell(
+                            onTap: () {
+                              // Navigator.of(context).pushNamed(
+                              //     AppRoutes.SCREEN_ABASTECER,
+                              //     arguments: abastecimentoProvider.itemsList[i]);
+                              Navigator.of(context).pushNamed(
+                                  AppRoutes.DETAIL_ABASTECIMENTO,
+                                  arguments:
+                                      abastecimentoProvider.itemsList[i]);
+                            },
+                            child: ListTile(
+                              leading: Icon(Icons.directions_car),
+                              title: Text(
+                                'Abastecimento',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                abastecimentoProvider
+                                    .itemsList[i].tipoCombustivel
+                                    .toString(),
+                              ),
+                              trailing: Text(
+                                  'R\$ ${abastecimentoProvider.itemsList[i].valorAbastecimento.toStringAsFixed(2)}'),
+                            ),
+                          );
+                        }),
+                  )
+                : Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Text('Ops! Não há despesa cadastrada.',
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      SizedBox(height: 30),
+                      Center(
+                        child: Image.asset(
+                          'lib/assets/despesa.png',
+                          height: 150,
+                          width: 200,
                         ),
-                        subtitle: Text(
-                          abastecimentoProvider.itemsList[i].tipoCombustivel
-                              .toString(),
-                        ),
-                        trailing: Text(abastecimentoProvider
-                            .itemsList[i].valorAbastecimento
-                            .toString()),
                       ),
-                    );
-                  }),
-            ),
+                    ],
+                  ),
           ],
         ),
       ),

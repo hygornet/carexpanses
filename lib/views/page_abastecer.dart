@@ -43,25 +43,26 @@ class _PageAbastecerState extends State<PageAbastecer> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
-    if (_formData.isEmpty) {
-      final receivedInfoAbastecer =
-          ModalRoute.of(context).settings.arguments as Abastecimento;
+    final receivedInfoAbastecer =
+        ModalRoute.of(context).settings.arguments as Abastecimento;
 
+    if (_formData.isEmpty) {
       if (receivedInfoAbastecer != null) {
         _formData['id'] = receivedInfoAbastecer.id;
         _formData['valorAbastecimento'] =
-            receivedInfoAbastecer.valorAbastecimento;
+            receivedInfoAbastecer.valorAbastecimento ?? "";
         _formData['litroAbastecimento'] =
-            receivedInfoAbastecer.litroAbastecimento;
-        _formData['hodometroAtual'] = receivedInfoAbastecer.hodometroAtual;
-        _formData['tipoCombustivel'] = receivedInfoAbastecer.tipoCombustivel;
+            receivedInfoAbastecer.litroAbastecimento ?? "";
+        _formData['hodometroAtual'] =
+            receivedInfoAbastecer.hodometroAtual ?? "";
+        _formData['tipoCombustivel'] =
+            receivedInfoAbastecer.tipoCombustivel ?? "";
       }
+      valorController.text = _formData['valorAbastecimento'].toString();
+      litroController.text = _formData['litroAbastecimento'].toString();
+      hodometroAtualController.text = _formData['hodometroAtual'].toString();
+      tipoCombustivelController.text = _formData['tipoCombustivel'].toString();
     }
-
-    valorController.text = _formData['valorAbastecimento'].toString();
-    litroController.text = _formData['litroAbastecimento'].toString();
-    hodometroAtualController.text = _formData['hodometroAtual'].toString();
-    tipoCombustivelController.text = _formData['tipoCombustivel'].toString();
   }
 
   @override
@@ -92,9 +93,9 @@ class _PageAbastecerState extends State<PageAbastecer> {
     double atualizarGastos() {
       if (guardarUltimoValor == null) {
         guardarUltimoValor = 0;
-        return abastecimentoProvider.valorAbastecimento = guardarUltimoValor;
+        return abastecimentoProvider.valorAbastecimento -= guardarUltimoValor;
       } else if (guardaUltimoHodometro != 0) {
-        return abastecimentoProvider.valorAbastecimento = guardarUltimoValor;
+        return abastecimentoProvider.valorAbastecimento -= guardarUltimoValor;
       }
     }
 
@@ -147,6 +148,11 @@ class _PageAbastecerState extends State<PageAbastecer> {
               ultimaMedia(diferencaHodometro(), litro);
         }
         print('ITENS LISTA: ${abastecimentoProvider.countList}');
+        print('DESPESA MES: ${abastecimentoProvider.despesasDoMes.toString()}');
+        print(
+            'VALOR ABASTECIMENTO: ${_formData['valorAbastecimento'].toString()}');
+        print(
+            'VALOR ABASTECIMENTO PROVIDER: ${abastecimentoProvider.valorAbastecimento.toString()}');
       } else {
         a.atualizarAbastecimento(abastecer);
       }
