@@ -100,9 +100,32 @@ class DetailAbastecimento extends StatelessWidget {
             ),
             RaisedButton(
               onPressed: () {
-                Provider.of<Abastecimento>(context, listen: false)
-                    .deletarAbastecimento(abastecimento.id);
-                Navigator.of(context).pop();
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Confirmação de Exclusão'),
+                      content: Text('Deseja realmente excluir?'),
+                      actions: [
+                        FlatButton(
+                          child: Text('Sim'),
+                          onPressed: () {
+                            Provider.of<Abastecimento>(context, listen: false)
+                                .deletarAbastecimento(abastecimento.id);
+
+                            Navigator.of(context).pushNamed(AppRoutes.HOME);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('Não'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               child: Text("Excluir"),
             ),

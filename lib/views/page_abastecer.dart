@@ -127,7 +127,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
       if (_formData['id'] == null) {
         a.adicionarAbastecimento(abastecer);
         double litro = double.parse(litroController.text);
-        double valor = double.parse(valorController.text);
 
         //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
         abastecimentoProvider.valorAbastecimento =
@@ -147,14 +146,17 @@ class _PageAbastecerState extends State<PageAbastecer> {
           abastecimentoProvider.ultimaMedia =
               ultimaMedia(diferencaHodometro(), litro);
         }
-        print('ITENS LISTA: ${abastecimentoProvider.countList}');
-        print('DESPESA MES: ${abastecimentoProvider.despesasDoMes.toString()}');
-        print(
-            'VALOR ABASTECIMENTO: ${_formData['valorAbastecimento'].toString()}');
-        print(
-            'VALOR ABASTECIMENTO PROVIDER: ${abastecimentoProvider.valorAbastecimento.toString()}');
       } else {
-        a.atualizarAbastecimento(abastecer);
+        //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
+        if (abastecimentoProvider.countList == 1) {
+          abastecimentoProvider.valorAbastecimento =
+              _formData['valorAbastecimento'];
+          abastecimentoProvider.despesasDoMes =
+              abastecimentoProvider.valorAbastecimento;
+          a.atualizarAbastecimento(abastecer);
+        } else {
+          a.atualizarAbastecimento(abastecer);
+        }
       }
     }
 

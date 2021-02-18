@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeScreen(),
         routes: {
+          AppRoutes.HOME: (ctx) => HomeScreen(),
           AppRoutes.SCREEN_ABASTECER: (ctx) => PageAbastecer(),
           AppRoutes.ALCOOL_GASOLINA: (ctx) => AlcoolGasolina(),
           AppRoutes.DETAIL_ABASTECIMENTO: (ctx) => DetailAbastecimento(),
