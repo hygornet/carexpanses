@@ -114,7 +114,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
         abastecimentoProvider.hodometroAtual = _formData['hodometroAtual'];
 
         // //Declaro o valor do hodometro anterior para função diferencaHodometro() funcionar.
-        // abastecimentoProvider.hodometroAnterior = _formData['hodometroAtual'];
+        abastecimentoProvider.hodometroAnterior = _formData['hodometroAtual'];
 
         //Função que calcula o gasto do mês.
         abastecimentoProvider.calculoDeAbastecimento();
