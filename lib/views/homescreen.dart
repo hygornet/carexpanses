@@ -95,10 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         children: [
                           isContainDespesasDoMes()
-                              ? Text(
-                                  'R\$${abastecimentoProvider.despesasDoMes.toStringAsFixed(2)}',
-                                  style: TextStyle(
-                                      fontSize: 25, color: Colors.white),
+                              ? Consumer<Abastecimento>(
+                                  builder: (context, abastecimento, child) => Text(
+                                      'R\$${abastecimento.despesasDoMes.toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        color: Colors.white,
+                                      )),
                                 )
                               : Text('R\$0.00',
                                   style: TextStyle(
@@ -115,18 +118,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Column(
                         children: [
-                          FittedBox(
-                            fit: BoxFit.cover,
-                            child: isContainUltimaMedia()
-                                ? Text(
-                                    '${abastecimentoProvider.ultimaMedia.toStringAsFixed(2)} km/l',
-                                    style: TextStyle(
-                                        fontSize: 25, color: Colors.white),
-                                  )
-                                : Text('0.0 km/l',
-                                    style: TextStyle(
-                                        fontSize: 25, color: Colors.white)),
-                          ),
+                          isContainUltimaMedia()
+                              ? FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Consumer<Abastecimento>(
+                                    builder: (context, abastecimento, child) =>
+                                        Text(
+                                      '${abastecimento.ultimaMedia.toStringAsFixed(2)} km/l',
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.white),
+                                    ),
+                                  ))
+                              : Text('0.00 km/l',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  )),
                           SizedBox(height: 5),
                           Text('ÚLTIMA MÉDIA',
                               style:

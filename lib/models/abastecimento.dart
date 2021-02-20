@@ -14,17 +14,18 @@ class Abastecimento with ChangeNotifier {
   double ultimaMedia;
   double tempAbastecimento;
 
-  Abastecimento(
-      {this.id,
-      this.valorAbastecimento,
-      this.litroAbastecimento,
-      this.tipoCombustivel,
-      this.hodometroAtual,
-      this.hodometroAnterior,
-      this.dateTime,
-      this.despesasDoMes,
-      this.ultimaMedia,
-      this.tempAbastecimento});
+  Abastecimento({
+    this.id,
+    this.valorAbastecimento,
+    this.litroAbastecimento,
+    this.tipoCombustivel,
+    this.hodometroAtual,
+    this.hodometroAnterior,
+    this.dateTime,
+    this.despesasDoMes,
+    this.ultimaMedia,
+    this.tempAbastecimento,
+  });
 
   List<Abastecimento> _items = [];
 
@@ -68,5 +69,12 @@ class Abastecimento with ChangeNotifier {
       _items.removeWhere((abastecimento) => abastecimento.id == id);
       notifyListeners();
     }
+  }
+
+  double calculoDeAbastecimento() {
+    Abastecimento ab = _items.reduce((first, second) => Abastecimento(
+        valorAbastecimento:
+            first.valorAbastecimento + second.valorAbastecimento));
+    return despesasDoMes = ab.valorAbastecimento;
   }
 }

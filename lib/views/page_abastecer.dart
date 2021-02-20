@@ -81,24 +81,6 @@ class _PageAbastecerState extends State<PageAbastecer> {
       }
     }
 
-    double somarGastos() {
-      if (guardarUltimoValor == null) {
-        guardarUltimoValor = 0;
-        return abastecimentoProvider.valorAbastecimento += guardarUltimoValor;
-      } else if (guardaUltimoHodometro != 0) {
-        return abastecimentoProvider.valorAbastecimento += guardarUltimoValor;
-      }
-    }
-
-    double atualizarGastos() {
-      if (guardarUltimoValor == null) {
-        guardarUltimoValor = 0;
-        return abastecimentoProvider.valorAbastecimento -= guardarUltimoValor;
-      } else if (guardaUltimoHodometro != 0) {
-        return abastecimentoProvider.valorAbastecimento -= guardarUltimoValor;
-      }
-    }
-
     double ultimaMedia(double kmPercorrido, double litros) {
       return kmPercorrido / litros;
     }
@@ -128,18 +110,14 @@ class _PageAbastecerState extends State<PageAbastecer> {
         a.adicionarAbastecimento(abastecer);
         double litro = double.parse(litroController.text);
 
-        //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
-        abastecimentoProvider.valorAbastecimento =
-            _formData['valorAbastecimento'];
-
-        //Atribuido o valor do hodometro ao abastecimentoProvider para ficar registrado o ultimo hodometro cadastrado.
+        // //Atribuido o valor do hodometro ao abastecimentoProvider para ficar registrado o ultimo hodometro cadastrado.
         abastecimentoProvider.hodometroAtual = _formData['hodometroAtual'];
 
-        //Declaro o valor do hodometro anterior para função diferencaHodometro() funcionar.
-        abastecimentoProvider.hodometroAnterior = _formData['hodometroAtual'];
+        // //Declaro o valor do hodometro anterior para função diferencaHodometro() funcionar.
+        // abastecimentoProvider.hodometroAnterior = _formData['hodometroAtual'];
 
-        //Função que soma os gastos do mês.
-        abastecimentoProvider.despesasDoMes = somarGastos();
+        //Função que calcula o gasto do mês.
+        abastecimentoProvider.calculoDeAbastecimento();
 
         //Verifica se a lista tem mais de um item, se tiver, faz o calculo da média.
         if (abastecimentoProvider.countList > 1) {
@@ -147,16 +125,8 @@ class _PageAbastecerState extends State<PageAbastecer> {
               ultimaMedia(diferencaHodometro(), litro);
         }
       } else {
-        //Declaro o valor do valorAbastecimento para função somarGastos() funcionar.
-        if (abastecimentoProvider.countList == 1) {
-          abastecimentoProvider.valorAbastecimento =
-              _formData['valorAbastecimento'];
-          abastecimentoProvider.despesasDoMes =
-              abastecimentoProvider.valorAbastecimento;
-          a.atualizarAbastecimento(abastecer);
-        } else {
-          a.atualizarAbastecimento(abastecer);
-        }
+        a.atualizarAbastecimento(abastecer);
+        abastecimentoProvider.calculoDeAbastecimento();
       }
     }
 
@@ -258,9 +228,9 @@ class _PageAbastecerState extends State<PageAbastecer> {
                     ),
                     SizedBox(height: 5),
                     isContainHodometroAnterior()
-                        ? Text('Hodometro anterior: ' +
-                            abastecimentoProvider.hodometroAtual.toString())
-                        : Text("Hodometro anterior: 0"),
+                        ? Text(
+                            'Hodometro anterior: ${abastecimentoProvider.hodometroAtual.toString()}')
+                        : Text('Hodometro anterior: 0'),
                     SizedBox(height: 5),
                     TextFormField(
                       controller: tipoCombustivelController,
@@ -301,31 +271,3 @@ class _PageAbastecerState extends State<PageAbastecer> {
     );
   }
 }
-
-//PRINTS DE ACOMPANHAMENTO
-
-// abastecimentoProvider.valorAbastecimento = valor;
-// print('Valor (Provider): ' +
-//     abastecimentoProvider.valorAbastecimento.toString());
-
-// abastecimentoProvider.litroAbastecimento = litro;
-// print('Litro (Provider): ' +
-//     abastecimentoProvider.litroAbastecimento.toString());
-
-// abastecimentoProvider.hodometroAnterior =
-//     abastecer.hodometroAnterior;
-// print("Hodometro Anterior (Provider): " +
-//     abastecimentoProvider.hodometroAtual.toString());
-
-// abastecimentoProvider.hodometroAtual =
-//     abastecer.hodometroAtual;
-// print("Hodometro Atual (Provider): " +
-//     abastecimentoProvider.hodometroAtual.toString());
-
-// abastecimentoProvider.tipoCombustivel =
-//     abastecer.tipoCombustivel;
-// print("Tipo de Combustivel (Provider): " +
-//     abastecimentoProvider.tipoCombustivel);
-
-// print("Provider Valor: " +
-//     abastecimentoProvider.valorAbastecimento.toString());
