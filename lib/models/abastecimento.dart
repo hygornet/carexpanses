@@ -58,6 +58,7 @@ class Abastecimento with ChangeNotifier {
 
     if (index >= 0) {
       _items[index] = abastecimento;
+
       notifyListeners();
     }
   }
@@ -67,14 +68,22 @@ class Abastecimento with ChangeNotifier {
 
     if (index >= 0) {
       _items.removeWhere((abastecimento) => abastecimento.id == id);
+      calculoDeAbastecimento();
+      if (_items.length == 0) {
+        despesasDoMes = 0;
+      }
       notifyListeners();
     }
   }
 
   double calculoDeAbastecimento() {
-    Abastecimento ab = _items.reduce((first, second) => Abastecimento(
-        valorAbastecimento:
-            first.valorAbastecimento + second.valorAbastecimento));
-    return despesasDoMes = ab.valorAbastecimento;
+    if (_items.length > 0) {
+      Abastecimento ab = _items.reduce((first, second) => Abastecimento(
+          valorAbastecimento:
+              first.valorAbastecimento + second.valorAbastecimento));
+      return despesasDoMes = ab.valorAbastecimento;
+    } else {
+      return despesasDoMes = 0;
+    }
   }
 }

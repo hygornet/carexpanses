@@ -31,21 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String resultado = "";
-    var _key = GlobalKey<FormState>();
-
-    String melhorAbastecerCom(double valorAlcool, double valorGasolina) {
-      double resultGasolina = valorGasolina * 0.7;
-      var r = double.parse(resultGasolina.toStringAsFixed(2));
-      if (r < valorAlcool) {
-        return resultado = 'Complete com alcool';
-      } else if (r > valorAlcool) {
-        return resultado = 'Complete com gasolina';
-      } else if (r == valorAlcool) {
-        return resultado = 'Os dois tem o mesmo custo benefício.';
-      }
-    }
-
     final abastecimentoProvider = Provider.of<Abastecimento>(context);
 
     return Scaffold(
