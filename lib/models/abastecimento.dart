@@ -85,6 +85,7 @@ class Abastecimento with ChangeNotifier {
     } else {
       despesasDoMes = 0;
       this.ultimaMedia = 0;
+      hodometroAtual = 0;
     }
   }
 
