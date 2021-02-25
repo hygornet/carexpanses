@@ -81,9 +81,9 @@ class _PageAbastecerState extends State<PageAbastecer> {
       }
     }
 
-    double ultimaMedia(double kmPercorrido, double litros) {
-      return kmPercorrido / litros;
-    }
+    // double ultimaMedia(double kmPercorrido, double litros) {
+    //   return kmPercorrido / litros;
+    // }
 
     void addAbastecimento() {
       var isValid = _formKey.currentState.validate();
@@ -105,9 +105,10 @@ class _PageAbastecerState extends State<PageAbastecer> {
         despesasDoMes: _formData['despesasMes'],
       );
 
-      final a = Provider.of<Abastecimento>(context, listen: false);
+      final abastecimentopProvider =
+          Provider.of<Abastecimento>(context, listen: false);
       if (_formData['id'] == null) {
-        a.adicionarAbastecimento(abastecer);
+        abastecimentopProvider.adicionarAbastecimento(abastecer);
         double litro = double.parse(litroController.text);
 
         // //Atribuido o valor do hodometro ao abastecimentoProvider para ficar registrado o ultimo hodometro cadastrado.
@@ -117,16 +118,17 @@ class _PageAbastecerState extends State<PageAbastecer> {
         abastecimentoProvider.hodometroAnterior = _formData['hodometroAtual'];
 
         //Função que calcula o gasto do mês.
-        abastecimentoProvider.calculoDeAbastecimento();
+        abastecimentoProvider.calculoDespesaMes();
 
         //Verifica se a lista tem mais de um item, se tiver, faz o calculo da média.
         if (abastecimentoProvider.countList > 1) {
-          abastecimentoProvider.ultimaMedia =
-              ultimaMedia(diferencaHodometro(), litro);
+          litro = double.parse(litroController.text);
+          abastecimentoProvider.ultimaMedia = abastecimentoProvider
+              .calculoUltimaMedia(diferencaHodometro(), litro);
         }
       } else {
-        a.atualizarAbastecimento(abastecer);
-        abastecimentoProvider.calculoDeAbastecimento();
+        abastecimentopProvider.atualizarAbastecimento(abastecer);
+        abastecimentoProvider.calculoDespesaMes();
       }
     }
 

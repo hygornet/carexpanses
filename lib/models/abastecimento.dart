@@ -68,7 +68,7 @@ class Abastecimento with ChangeNotifier {
 
     if (index >= 0) {
       _items.removeWhere((abastecimento) => abastecimento.id == id);
-      calculoDeAbastecimento();
+      calculoDespesaMes();
       if (_items.length == 0) {
         despesasDoMes = 0;
       }
@@ -76,14 +76,19 @@ class Abastecimento with ChangeNotifier {
     }
   }
 
-  double calculoDeAbastecimento() {
+  void calculoDespesaMes() {
     if (_items.length > 0) {
       Abastecimento ab = _items.reduce((first, second) => Abastecimento(
           valorAbastecimento:
               first.valorAbastecimento + second.valorAbastecimento));
-      return despesasDoMes = ab.valorAbastecimento;
+      despesasDoMes = ab.valorAbastecimento;
     } else {
-      return despesasDoMes = 0;
+      despesasDoMes = 0;
+      this.ultimaMedia = 0;
     }
+  }
+
+  double calculoUltimaMedia(double kmPercorrido, double litros) {
+    return kmPercorrido / litros;
   }
 }
