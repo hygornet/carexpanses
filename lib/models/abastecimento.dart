@@ -84,7 +84,6 @@ class Abastecimento with ChangeNotifier {
       despesasDoMes = ab.valorAbastecimento;
     } else {
       despesasDoMes = 0;
-      this.ultimaMedia = 0;
       hodometroAtual = 0;
     }
   }

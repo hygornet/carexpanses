@@ -101,7 +101,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
         hodometroAtual: _formData['hodometroAtual'],
         hodometroAnterior: _formData['hodometroAnterior'],
         tipoCombustivel: _formData['tipoCombustivel'],
-        dateTime: _formData['dataAtual'],
+        dateTime: dataAtual,
         despesasDoMes: _formData['despesasMes'],
       );
 
@@ -257,7 +257,7 @@ class _PageAbastecerState extends State<PageAbastecer> {
               SizedBox(height: 5),
               Container(
                 width: double.infinity,
-                child: RaisedButton(
+                child: ElevatedButton(
                   child: Text('Calcular'),
                   onPressed: () {
                     addAbastecimento();

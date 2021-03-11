@@ -109,7 +109,7 @@ class _AlcoolGasolinaState extends State<AlcoolGasolina> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: FlatButton(
+                        child: TextButton(
                           child: Text('Calcular'),
                           onPressed: () {
                             setState(() {

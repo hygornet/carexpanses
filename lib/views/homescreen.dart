@@ -145,19 +145,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       Container(
                         width: 150,
                         height: 80,
-                        child: RaisedButton(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.white.withOpacity(0.5)),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pushNamed(
                                 AppRoutes.SCREEN_ABASTECER,
                                 arguments: abastecer);
                           },
-                          color: Colors.white,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'Abastecer',
                                 textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.black),
                               ),
                               Image.asset(
                                 'lib/assets/fuel-removebg-preview.png',
@@ -173,15 +177,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       Container(
                         width: 150,
                         height: 80,
-                        child: RaisedButton(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.white.withOpacity(0.5)),
+                          ),
                           onPressed: () {},
-                          color: Colors.white,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'Limpeza',
                                 textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.black),
                               ),
                               Image.asset(
                                 'lib/assets/kisspng-car-wash-super-wash-auto-detailing-5b3ab2a172b1d2.9630374215305734734698-removebg-preview.png',
@@ -197,15 +205,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       Container(
                         width: 150,
                         height: 80,
-                        child: RaisedButton(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.white.withOpacity(0.5)),
+                          ),
                           onPressed: () {},
-                          color: Colors.white,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'Manutenção',
                                 textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.black),
                               ),
                               Image.asset(
                                 'lib/assets/car-maintenance-17-1133203-removebg-preview.png',

@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 class DetailAbastecimento extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final format = DateFormat('dd/MM/yyyy hh:mm');
-    // var dataAtual = DateTime.now();
+    final format = DateFormat('dd/MM/yyyy hh:mm');
+    var dataAtual = DateTime.now();
 
     final abastecimento =
         ModalRoute.of(context).settings.arguments as Abastecimento;
@@ -16,6 +16,8 @@ class DetailAbastecimento extends StatelessWidget {
 
     double precoPorLitragem =
         abastecimento.valorAbastecimento / abastecimento.litroAbastecimento;
+
+    Abastecimento abast = Abastecimento();
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +61,7 @@ class DetailAbastecimento extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Data do Abastecimento: '),
-                // Text(format.format(abastecimento.dateTime)),
+                Text(format.format(abastecimento.dateTime)),
               ],
             ),
             Row(
@@ -98,7 +100,7 @@ class DetailAbastecimento extends StatelessWidget {
               },
               child: Text("Alterar dados"),
             ),
-            RaisedButton(
+            TextButton(
               onPressed: () {
                 showDialog(
                   context: context,
@@ -107,7 +109,7 @@ class DetailAbastecimento extends StatelessWidget {
                       title: Text('Confirmação de Exclusão'),
                       content: Text('Deseja realmente excluir?'),
                       actions: [
-                        FlatButton(
+                        TextButton(
                           child: Text('Sim'),
                           onPressed: () {
                             Provider.of<Abastecimento>(context, listen: false)
@@ -116,7 +118,7 @@ class DetailAbastecimento extends StatelessWidget {
                             Navigator.of(context).pushNamed(AppRoutes.HOME);
                           },
                         ),
-                        FlatButton(
+                        TextButton(
                           child: Text('Não'),
                           onPressed: () {
                             Navigator.of(context).pop();
